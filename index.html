@@ -461,7 +461,7 @@
   }
 
   // ---- "Use my location" ----
-  document.getElementById('locate-btn').addEventListener('click', function () {
+  function useMyLocation(onError) {
     if (!navigator.geolocation) {
       setStatus('Your browser does not support GPS location.', true);
       return;
@@ -472,9 +472,19 @@
         locationInput.value = '';
         setOrigin({ lat: pos.coords.latitude, lng: pos.coords.longitude }, 'Using your current location.');
       },
-      () => setStatus('Could not get your location — check phone permissions, or type a city/zip instead.', true)
+      () => {
+        setStatus('Could not get your location — check phone permissions, or type a city/zip instead.', true);
+        if (onError) onError();
+      }
     );
+  }
+
+  document.getElementById('locate-btn').addEventListener('click', function () {
+    useMyLocation();
   });
+
+  // Default to the user's current location on load, no click needed
+  useMyLocation();
 
   // ---- Typed location ----
   let geocodeTimer;

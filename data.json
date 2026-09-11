@@ -177,6 +177,78 @@
       "lat": 41.3663986,
       "lng": -85.0550963,
       "summary": "Monthly cruise-in on the Dekalb County Courthouse square. Casual, no judging."
+    },
+    {
+      "id": "middlebury-essenhaus-2026-09-10",
+      "name": "Essenhaus Classic Car Cruise-In",
+      "date": "2026-09-10",
+      "lat": 41.6679466,
+      "lng": -85.7240339,
+      "summary": "Weekly Thursday cruise-in at Das Dutchman Essenhaus. Free to register, no judging, coupons to the restaurant and shops."
+    },
+    {
+      "id": "middlebury-essenhaus-2026-09-17",
+      "name": "Essenhaus Classic Car Cruise-In",
+      "date": "2026-09-17",
+      "lat": 41.6679466,
+      "lng": -85.7240339,
+      "summary": "Weekly Thursday cruise-in at Das Dutchman Essenhaus. Free to register, no judging, coupons to the restaurant and shops."
+    },
+    {
+      "id": "middlebury-essenhaus-2026-09-24",
+      "name": "Essenhaus Classic Car Cruise-In (Season Finale)",
+      "date": "2026-09-24",
+      "lat": 41.6679466,
+      "lng": -85.7240339,
+      "summary": "Final weekly cruise-in of the season at Das Dutchman Essenhaus, 20th annual series. Free to register, no judging."
+    },
+    {
+      "id": "lakeville-gearsgrub-2026-09-11",
+      "name": "Gears & Grub Fall Cruise-In Series",
+      "date": "2026-09-11",
+      "lat": 41.5341642,
+      "lng": -86.2748959,
+      "summary": "Weekly Friday cruise-in at Newton Park with food trucks and live music. Cars, trucks, motorcycles, and tractors welcome, no judging."
+    },
+    {
+      "id": "lakeville-gearsgrub-2026-09-18",
+      "name": "Gears & Grub Fall Cruise-In Series",
+      "date": "2026-09-18",
+      "lat": 41.5341642,
+      "lng": -86.2748959,
+      "summary": "Weekly Friday cruise-in at Newton Park with food trucks and live music. Cars, trucks, motorcycles, and tractors welcome, no judging."
+    },
+    {
+      "id": "lakeville-gearsgrub-2026-09-25",
+      "name": "Gears & Grub Fall Cruise-In Series",
+      "date": "2026-09-25",
+      "lat": 41.5341642,
+      "lng": -86.2748959,
+      "summary": "Weekly Friday cruise-in at Newton Park with food trucks and live music. Cars, trucks, motorcycles, and tractors welcome, no judging."
+    },
+    {
+      "id": "bremen-carsandcigars-2026-09-12",
+      "name": "Cars & Cigars",
+      "date": "2026-09-12",
+      "lat": 41.4322627,
+      "lng": -86.228354,
+      "summary": "Casual cruise-in at the Bremen Conservation Club by Lake of the Woods. Food trucks, cigars for 21+, no judging."
+    },
+    {
+      "id": "winonalake-carscoffee-2026-09-19",
+      "name": "Cars & Coffee at the Village at Winona",
+      "date": "2026-09-19",
+      "lat": 41.2272668,
+      "lng": -85.8219345,
+      "summary": "Casual monthly Cars & Coffee at The Village at Winona, season finale. All makes and models, no judging."
+    },
+    {
+      "id": "southbend-cruiseincookout-2026-09-19",
+      "name": "Cruise-In Cookout",
+      "date": "2026-09-19",
+      "lat": 41.7137889,
+      "lng": -86.2739441,
+      "summary": "Casual cruise-in and cookout on Riverside Dr. Free hot dogs and burgers, all cars and bikes welcome, no judging."
     }
   ]
 }

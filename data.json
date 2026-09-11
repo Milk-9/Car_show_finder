@@ -1,29 +1,182 @@
 {
   "lastUpdated": "2026-09-10",
+  "searchArea": "100 miles of Goshen, IN, through October 31, 2026",
   "events": [
     {
-      "id": "sample-1",
-      "name": "Sample Cruise-In — Main Street",
-      "date": "2026-09-20",
-      "lat": 39.7684,
-      "lng": -86.1581,
-      "summary": "Weekly Saturday cruise-in, all makes welcome, downtown lot, food truck on site."
+      "id": "laporte-sunflower-2026-09-19",
+      "name": "Sunflower Fair Auto Show",
+      "date": "2026-09-19",
+      "lat": 41.6103861,
+      "lng": -86.7202204,
+      "summary": "Judged car show, Downtown La Porte. $15 car entry; awards for Mayor's Choice, Fire Chief's Choice, Sheriff's Choice, and Best of Show."
     },
     {
-      "id": "sample-2",
-      "name": "Sample Classic Car Show — VFW Post",
-      "date": "2026-09-27",
-      "lat": 39.9612,
-      "lng": -82.9988,
-      "summary": "Judged show benefiting local VFW, dash plaques for first 100 cars, trophies for top 20."
+      "id": "rochester-redhot-2026-10-10",
+      "name": "Red Hot Car Show",
+      "date": "2026-10-10",
+      "lat": 41.066213,
+      "lng": -86.215203,
+      "summary": "30th annual judged car show in Downtown Rochester. Vintage classics through modern builds."
     },
     {
-      "id": "sample-3",
-      "name": "Sample Fall Cruise — Riverside Park",
-      "date": "2026-10-04",
-      "lat": 39.1031,
-      "lng": -84.5120,
-      "summary": "Riverside park cruise-in, DJ and 50/50 raffle, rain date following weekend."
+      "id": "kendallville-carshow-2026-09-12",
+      "name": "Kendallville Car Show",
+      "date": "2026-09-12",
+      "lat": 41.4950925,
+      "lng": -85.3792942,
+      "summary": "Downtown Kendallville car show, hundreds of cars and trucks on Main Street."
+    },
+    {
+      "id": "kalamazoo-nsra-2026-09-25",
+      "name": "NSRA Street Rod Nationals North (Day 1)",
+      "date": "2026-09-25",
+      "lat": 42.2919,
+      "lng": -85.5697,
+      "summary": "Large judged street rod show at the Kalamazoo County Expo Center, part of the National Street Rod Association circuit."
+    },
+    {
+      "id": "kalamazoo-nsra-2026-09-26",
+      "name": "NSRA Street Rod Nationals North (Day 2)",
+      "date": "2026-09-26",
+      "lat": 42.2919,
+      "lng": -85.5697,
+      "summary": "Large judged street rod show at the Kalamazoo County Expo Center, part of the National Street Rod Association circuit."
+    },
+    {
+      "id": "galesburg-cruisein-2026-09-15",
+      "name": "Galesburg Tuesday Night Cruise-In",
+      "date": "2026-09-15",
+      "lat": 42.288839,
+      "lng": -85.4165945,
+      "summary": "Weekly Tuesday cruise-in at The Venue at 68. Casual show-and-shine, no judging."
+    },
+    {
+      "id": "galesburg-cruisein-2026-09-22",
+      "name": "Galesburg Tuesday Night Cruise-In",
+      "date": "2026-09-22",
+      "lat": 42.288839,
+      "lng": -85.4165945,
+      "summary": "Weekly Tuesday cruise-in at The Venue at 68. Casual show-and-shine, no judging."
+    },
+    {
+      "id": "galesburg-cruisein-2026-09-29",
+      "name": "Galesburg Tuesday Night Cruise-In",
+      "date": "2026-09-29",
+      "lat": 42.288839,
+      "lng": -85.4165945,
+      "summary": "Weekly Tuesday cruise-in at The Venue at 68. Casual show-and-shine, no judging."
+    },
+    {
+      "id": "galesburg-cruisein-2026-10-06",
+      "name": "Galesburg Tuesday Night Cruise-In",
+      "date": "2026-10-06",
+      "lat": 42.288839,
+      "lng": -85.4165945,
+      "summary": "Weekly Tuesday cruise-in at The Venue at 68. Casual show-and-shine, no judging."
+    },
+    {
+      "id": "galesburg-cruisein-2026-10-13",
+      "name": "Galesburg Tuesday Night Cruise-In",
+      "date": "2026-10-13",
+      "lat": 42.288839,
+      "lng": -85.4165945,
+      "summary": "Weekly Tuesday cruise-in at The Venue at 68. Casual show-and-shine, no judging."
+    },
+    {
+      "id": "galesburg-cruisein-2026-10-20",
+      "name": "Galesburg Tuesday Night Cruise-In",
+      "date": "2026-10-20",
+      "lat": 42.288839,
+      "lng": -85.4165945,
+      "summary": "Weekly Tuesday cruise-in at The Venue at 68. Casual show-and-shine, no judging."
+    },
+    {
+      "id": "galesburg-cruisein-2026-10-27",
+      "name": "Galesburg Tuesday Night Cruise-In",
+      "date": "2026-10-27",
+      "lat": 42.288839,
+      "lng": -85.4165945,
+      "summary": "Weekly Tuesday cruise-in at The Venue at 68. Casual show-and-shine, no judging."
+    },
+    {
+      "id": "niles-oldeboystoys-2026-09-16",
+      "name": "Olde Boys Toys Cruise-In",
+      "date": "2026-09-16",
+      "lat": 41.830342,
+      "lng": -86.258888,
+      "summary": "Weekly Wednesday cruise-in at Riverfront Park along the St. Joseph River. Laid-back show-and-shine, no judging."
+    },
+    {
+      "id": "niles-oldeboystoys-2026-09-23",
+      "name": "Olde Boys Toys Cruise-In",
+      "date": "2026-09-23",
+      "lat": 41.830342,
+      "lng": -86.258888,
+      "summary": "Weekly Wednesday cruise-in at Riverfront Park along the St. Joseph River. Laid-back show-and-shine, no judging."
+    },
+    {
+      "id": "niles-oldeboystoys-2026-09-30",
+      "name": "Olde Boys Toys Cruise-In",
+      "date": "2026-09-30",
+      "lat": 41.830342,
+      "lng": -86.258888,
+      "summary": "Weekly Wednesday cruise-in at Riverfront Park along the St. Joseph River. Laid-back show-and-shine, no judging."
+    },
+    {
+      "id": "niles-oldeboystoys-2026-10-07",
+      "name": "Olde Boys Toys Cruise-In",
+      "date": "2026-10-07",
+      "lat": 41.830342,
+      "lng": -86.258888,
+      "summary": "Weekly Wednesday cruise-in at Riverfront Park along the St. Joseph River. Laid-back show-and-shine, no judging."
+    },
+    {
+      "id": "niles-oldeboystoys-2026-10-14",
+      "name": "Olde Boys Toys Cruise-In",
+      "date": "2026-10-14",
+      "lat": 41.830342,
+      "lng": -86.258888,
+      "summary": "Weekly Wednesday cruise-in at Riverfront Park along the St. Joseph River. Laid-back show-and-shine, no judging."
+    },
+    {
+      "id": "niles-oldeboystoys-2026-10-21",
+      "name": "Olde Boys Toys Cruise-In",
+      "date": "2026-10-21",
+      "lat": 41.830342,
+      "lng": -86.258888,
+      "summary": "Weekly Wednesday cruise-in at Riverfront Park along the St. Joseph River. Laid-back show-and-shine, no judging."
+    },
+    {
+      "id": "niles-oldeboystoys-2026-10-28",
+      "name": "Olde Boys Toys Cruise-In",
+      "date": "2026-10-28",
+      "lat": 41.830342,
+      "lng": -86.258888,
+      "summary": "Weekly Wednesday cruise-in at Riverfront Park along the St. Joseph River. Laid-back show-and-shine, no judging."
+    },
+    {
+      "id": "auburn-thirdthursday-2026-09-17",
+      "name": "Third Thursday Cruise-In (sponsored by Fort Financial)",
+      "date": "2026-09-17",
+      "lat": 41.3663986,
+      "lng": -85.0550963,
+      "summary": "Monthly cruise-in on the Dekalb County Courthouse square. Casual, no judging."
+    },
+    {
+      "id": "nappanee-wingsandwheels-2026-09-19",
+      "name": "Wings & Wheels Show",
+      "date": "2026-09-19",
+      "lat": 41.4439,
+      "lng": -85.9599,
+      "summary": "Judged car and airplane show at Nappanee Airport, part of the Nappanee Apple Festival weekend. Classic cars, aircraft on display, awards. Noon-3:45pm."
+    },
+    {
+      "id": "auburn-thirdthursday-2026-10-15",
+      "name": "Third Thursday Cruise-In (sponsored by Fort Financial)",
+      "date": "2026-10-15",
+      "lat": 41.3663986,
+      "lng": -85.0550963,
+      "summary": "Monthly cruise-in on the Dekalb County Courthouse square. Casual, no judging."
     }
   ]
 }

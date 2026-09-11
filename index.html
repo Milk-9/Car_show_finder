@@ -138,6 +138,35 @@
   .popup-title { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 17px; margin: 0 0 2px; color: var(--amber); }
   .popup-meta { font-size: 12px; color: var(--text-muted); margin: 0 0 6px; }
   .popup-summary { font-size: 13px; margin: 0; line-height: 1.4; }
+  .popup-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+  }
+  .popup-directions {
+    background: var(--amber);
+    color: var(--asphalt);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 12px;
+    padding: 6px 10px;
+    border-radius: 5px;
+    line-height: 1.2;
+  }
+  .popup-copy {
+    background: transparent;
+    color: var(--text);
+    border: 1px solid var(--line);
+    font-weight: 600;
+    font-size: 12px;
+    padding: 6px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  .popup-copy.copied {
+    border-color: var(--in-range);
+    color: var(--in-range);
+  }
 
   /* ---- Results drawer ---- */
   #drawer {
@@ -317,6 +346,38 @@
     return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   }
 
+  map.on('popupopen', function (e) {
+    const btn = e.popup.getElement().querySelector('.popup-copy');
+    if (!btn) return;
+    btn.addEventListener('click', function () {
+      const coords = btn.getAttribute('data-coords');
+      const done = () => {
+        btn.textContent = 'Copied!';
+        btn.classList.add('copied');
+        setTimeout(() => {
+          btn.textContent = 'Copy coordinates';
+          btn.classList.remove('copied');
+        }, 1500);
+      };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(coords).then(done).catch(() => fallbackCopy(coords, done));
+      } else {
+        fallbackCopy(coords, done);
+      }
+    });
+  });
+
+  function fallbackCopy(text, done) {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    try { document.execCommand('copy'); done(); } catch (e) {}
+    document.body.removeChild(ta);
+  }
+
   // ---- Load event data ----
   fetch('data.json')
     .then(r => r.json())
@@ -345,9 +406,15 @@
       const d = distanceMiles(state.origin.lat, state.origin.lng, ev.lat, ev.lng);
       distStr = ' &middot; ' + d.toFixed(0) + ' mi away';
     }
+    const coords = ev.lat.toFixed(6) + ',' + ev.lng.toFixed(6);
+    const mapsUrl = 'https://www.google.com/maps/dir/?api=1&destination=' + coords;
     return '<div class="popup-title">' + escapeHtml(ev.name) + '</div>' +
       '<div class="popup-meta">' + dateStr + distStr + '</div>' +
-      '<p class="popup-summary">' + escapeHtml(ev.summary || '') + '</p>';
+      '<p class="popup-summary">' + escapeHtml(ev.summary || '') + '</p>' +
+      '<div class="popup-actions">' +
+        '<a href="' + mapsUrl + '" target="_blank" rel="noopener" class="popup-directions">Directions</a>' +
+        '<button type="button" class="popup-copy" data-coords="' + coords + '">Copy coordinates</button>' +
+      '</div>';
   }
 
   function formatDate(dateStr) {

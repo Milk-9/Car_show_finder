@@ -332,7 +332,7 @@
 
   function renderMarkers() {
     state.events.forEach(ev => {
-      const marker = L.marker([ev.lat, ev.lng], { icon: eventIcon }).addTo(map);
+      const marker = L.marker([ev.lat, ev.lng], { icon: eventIcon });
       marker.bindPopup(popupHtml(ev));
       state.markers[ev.id] = marker;
     });
@@ -433,22 +433,32 @@
       return;
     }
 
-    const matches = state.events
+    const dateMatches = state.events
       .map(ev => Object.assign({}, ev, {
-        distance: distanceMiles(state.origin.lat, state.origin.lng, ev.lat, ev.lng)
+        distance: state.origin ? distanceMiles(state.origin.lat, state.origin.lng, ev.lat, ev.lng) : null
       }))
-      .filter(ev => ev.distance <= radius && ev.date === date)
+      .filter(ev => ev.date === date);
+
+    const matches = dateMatches
+      .filter(ev => ev.distance !== null && ev.distance <= radius)
       .sort((a, b) => a.distance - b.distance);
 
     state.matches = matches;
     resultCount.textContent = matches.length;
 
-    // Update marker visibility/opacity based on match
-    const matchIds = new Set(matches.map(m => m.id));
+    // Show markers for every event on the selected date (regardless of radius);
+    // dim the ones outside the radius. Everything on a different date is removed.
+    const inRangeIds = new Set(matches.map(m => m.id));
+    const onDateIds = new Set(dateMatches.map(m => m.id));
     Object.keys(state.markers).forEach(id => {
       const marker = state.markers[id];
-      marker.setOpacity(matchIds.has(id) ? 1 : 0.25);
-      marker.setPopupContent(popupHtml(state.events.find(e => e.id === id)));
+      const onMap = map.hasLayer(marker);
+      if (onDateIds.has(id)) {
+        if (!onMap) marker.addTo(map);
+        marker.setOpacity(inRangeIds.has(id) ? 1 : 0.35);
+      } else if (onMap) {
+        map.removeLayer(marker);
+      }
     });
 
     if (!matches.length) {

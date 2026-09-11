@@ -241,12 +241,8 @@
         <input type="number" id="radius-input" value="75" min="1" max="1000">
       </div>
       <div class="field">
-        <label for="date-start">From date</label>
-        <input type="date" id="date-start">
-      </div>
-      <div class="field">
-        <label for="date-end">To date</label>
-        <input type="date" id="date-end">
+        <label for="show-date">Date</label>
+        <input type="date" id="show-date">
       </div>
     </div>
 
@@ -279,19 +275,15 @@
   const statusLine = document.getElementById('status-line');
   const locationInput = document.getElementById('location-input');
   const radiusInput = document.getElementById('radius-input');
-  const dateStart = document.getElementById('date-start');
-  const dateEnd = document.getElementById('date-end');
+  const showDate = document.getElementById('show-date');
   const resultsList = document.getElementById('results-list');
   const resultCount = document.getElementById('result-count');
   const drawer = document.getElementById('drawer');
   const drawerHandle = document.getElementById('drawer-handle');
 
-  // Default date window: today through 60 days out
+  // Default date: today
   const today = new Date();
-  const future = new Date();
-  future.setDate(today.getDate() + 60);
-  dateStart.value = today.toISOString().slice(0, 10);
-  dateEnd.value = future.toISOString().slice(0, 10);
+  showDate.value = today.toISOString().slice(0, 10);
 
   // ---- Map setup ----
   const map = L.map('map', { zoomControl: true }).setView([39.8283, -98.5795], 4);
@@ -433,8 +425,7 @@
   // ---- Search / filter ----
   function runSearch() {
     const radius = parseFloat(radiusInput.value) || 0;
-    const start = dateStart.value;
-    const end = dateEnd.value;
+    const date = showDate.value;
 
     if (!state.origin) {
       resultCount.textContent = '0';
@@ -446,7 +437,7 @@
       .map(ev => Object.assign({}, ev, {
         distance: distanceMiles(state.origin.lat, state.origin.lng, ev.lat, ev.lng)
       }))
-      .filter(ev => ev.distance <= radius && ev.date >= start && ev.date <= end)
+      .filter(ev => ev.distance <= radius && ev.date === date)
       .sort((a, b) => a.distance - b.distance);
 
     state.matches = matches;
@@ -483,7 +474,7 @@
     });
   }
 
-  [radiusInput, dateStart, dateEnd].forEach(el => {
+  [radiusInput, showDate].forEach(el => {
     el.addEventListener('change', runSearch);
   });
 

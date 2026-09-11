@@ -1,6 +1,6 @@
 {
-  "name": "Cruise Radius",
-  "short_name": "Cruise Radius",
+  "name": "Car Show Finder",
+  "short_name": "Car Show Finder",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#14181C",

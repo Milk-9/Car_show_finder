@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Cruise Radius</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --asphalt: #14181C;
+    --panel: #1F262D;
+    --panel-raised: #262E36;
+    --amber: #E8A33D;
+    --amber-dim: #B87F2C;
+    --text: #F2EFEA;
+    --text-muted: #8B96A1;
+    --line: #313B44;
+    --in-range: #6FA57A;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    background: var(--asphalt);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    overflow: hidden;
+  }
+
+  h1, h2, h3, .display {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+  }
+
+  #app {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    height: 100dvh;
+  }
+
+  /* ---- Top bar ---- */
+  #controls {
+    background: var(--panel);
+    border-bottom: 1px solid var(--line);
+    padding: 12px 14px 10px;
+    z-index: 500;
+    flex-shrink: 0;
+  }
+
+  #controls h1 {
+    font-size: 22px;
+    margin: 0 0 10px;
+    color: var(--amber);
+    line-height: 1;
+  }
+  #controls h1 span {
+    color: var(--text);
+  }
+
+  .row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+
+  .field {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .field label {
+    font-size: 11px;
+    color: var(--text-muted);
+    font-weight: 500;
+  }
+
+  input[type="text"], input[type="number"], input[type="date"] {
+    background: var(--panel-raised);
+    border: 1px solid var(--line);
+    color: var(--text);
+    padding: 8px 9px;
+    border-radius: 6px;
+    font-size: 15px;
+    font-family: 'Inter', sans-serif;
+    width: 100%;
+  }
+
+  input:focus {
+    outline: 2px solid var(--amber);
+    outline-offset: -1px;
+  }
+
+  button {
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    border: none;
+    border-radius: 6px;
+    padding: 9px 12px;
+    cursor: pointer;
+  }
+
+  #locate-btn {
+    background: var(--panel-raised);
+    color: var(--text);
+    border: 1px solid var(--line);
+    white-space: nowrap;
+  }
+  #locate-btn:active { background: var(--line); }
+
+  #status-line {
+    font-size: 12px;
+    color: var(--text-muted);
+    min-height: 16px;
+  }
+  #status-line.warn { color: var(--amber); }
+
+  /* ---- Map ---- */
+  #map {
+    flex: 1;
+    min-height: 0;
+  }
+  .leaflet-popup-content-wrapper {
+    background: var(--panel-raised);
+    color: var(--text);
+    border-radius: 8px;
+  }
+  .leaflet-popup-tip { background: var(--panel-raised); }
+  .popup-title { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 17px; margin: 0 0 2px; color: var(--amber); }
+  .popup-meta { font-size: 12px; color: var(--text-muted); margin: 0 0 6px; }
+  .popup-summary { font-size: 13px; margin: 0; line-height: 1.4; }
+
+  /* ---- Results drawer ---- */
+  #drawer {
+    background: var(--panel);
+    border-top: 1px solid var(--line);
+    flex-shrink: 0;
+    max-height: 42%;
+    display: flex;
+    flex-direction: column;
+    transition: max-height 0.2s ease;
+  }
+  #drawer.collapsed { max-height: 44px; }
+
+  #drawer-handle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 14px;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+  #drawer-handle h2 {
+    font-size: 16px;
+    margin: 0;
+    color: var(--text);
+  }
+  #drawer-handle .count {
+    color: var(--amber);
+  }
+  #drawer-handle .chevron {
+    color: var(--text-muted);
+    font-size: 13px;
+    transition: transform 0.2s ease;
+  }
+  #drawer.collapsed .chevron { transform: rotate(180deg); }
+
+  #results-list {
+    overflow-y: auto;
+    padding: 0 14px 12px;
+  }
+
+  .result-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 10px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--line);
+    cursor: pointer;
+  }
+  .result-item:last-child { border-bottom: none; }
+  .result-item .name {
+    font-weight: 600;
+    font-size: 14px;
+  }
+  .result-item .sub {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 2px;
+  }
+  .result-item .dist {
+    font-size: 13px;
+    color: var(--in-range);
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .empty-state {
+    color: var(--text-muted);
+    font-size: 13px;
+    padding: 16px 0;
+    text-align: center;
+  }
+
+  .leaflet-control-attribution {
+    background: rgba(20,24,28,0.7) !important;
+    color: var(--text-muted) !important;
+  }
+  .leaflet-control-attribution a { color: var(--text-muted) !important; }
+</style>
+</head>
+<body>
+
+<div id="app">
+  <div id="controls">
+    <h1>Cruise <span>Radius</span></h1>
+
+    <div class="row">
+      <div class="field" style="flex: 2;">
+        <label for="location-input">Starting from</label>
+        <input type="text" id="location-input" placeholder="City, address, or zip">
+      </div>
+      <div class="field" style="flex: 0 0 auto; justify-content: flex-end;">
+        <button id="locate-btn">Use my location</button>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="field">
+        <label for="radius-input">Radius (miles)</label>
+        <input type="number" id="radius-input" value="75" min="1" max="1000">
+      </div>
+      <div class="field">
+        <label for="date-start">From date</label>
+        <input type="date" id="date-start">
+      </div>
+      <div class="field">
+        <label for="date-end">To date</label>
+        <input type="date" id="date-end">
+      </div>
+    </div>
+
+    <div id="status-line">Set a starting point to search.</div>
+  </div>
+
+  <div id="map"></div>
+
+  <div id="drawer">
+    <div id="drawer-handle">
+      <h2><span class="count" id="result-count">0</span> shows found</h2>
+      <span class="chevron">&#9650;</span>
+    </div>
+    <div id="results-list">
+      <div class="empty-state">No results yet.</div>
+    </div>
+  </div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+(function () {
+  const state = {
+    origin: null,       // {lat, lng}
+    events: [],
+    markers: {},
+    matches: []
+  };
+
+  const statusLine = document.getElementById('status-line');
+  const locationInput = document.getElementById('location-input');
+  const radiusInput = document.getElementById('radius-input');
+  const dateStart = document.getElementById('date-start');
+  const dateEnd = document.getElementById('date-end');
+  const resultsList = document.getElementById('results-list');
+  const resultCount = document.getElementById('result-count');
+  const drawer = document.getElementById('drawer');
+  const drawerHandle = document.getElementById('drawer-handle');
+
+  // Default date window: today through 60 days out
+  const today = new Date();
+  const future = new Date();
+  future.setDate(today.getDate() + 60);
+  dateStart.value = today.toISOString().slice(0, 10);
+  dateEnd.value = future.toISOString().slice(0, 10);
+
+  // ---- Map setup ----
+  const map = L.map('map', { zoomControl: true }).setView([39.8283, -98.5795], 4);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; OpenStreetMap contributors',
+    maxZoom: 18
+  }).addTo(map);
+
+  let originMarker = null;
+  const originIcon = L.divIcon({
+    className: '',
+    html: '<div style="width:16px;height:16px;border-radius:50%;background:#E8A33D;border:3px solid #14181C;box-shadow:0 0 0 2px #E8A33D;"></div>',
+    iconSize: [16, 16],
+    iconAnchor: [8, 8]
+  });
+  const eventIcon = L.divIcon({
+    className: '',
+    html: '<div style="width:14px;height:14px;border-radius:50% 50% 50% 0;background:#6FA57A;border:2px solid #14181C;transform:rotate(-45deg);"></div>',
+    iconSize: [14, 14],
+    iconAnchor: [7, 14]
+  });
+
+  // ---- Distance calc (haversine, miles) ----
+  function distanceMiles(lat1, lng1, lat2, lng2) {
+    const R = 3958.8;
+    const dLat = (lat2 - lat1) * Math.PI / 180;
+    const dLng = (lng2 - lng1) * Math.PI / 180;
+    const a = Math.sin(dLat / 2) ** 2 +
+      Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+      Math.sin(dLng / 2) ** 2;
+    return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  }
+
+  // ---- Load event data ----
+  fetch('data.json')
+    .then(r => r.json())
+    .then(data => {
+      state.events = data.events || [];
+      setStatus(state.events.length + ' shows loaded (last updated ' + (data.lastUpdated || 'unknown') + '). Set a starting point to search.');
+      renderMarkers();
+      runSearch();
+    })
+    .catch(() => {
+      setStatus('Could not load data.json — make sure it is in the same folder as this page.', true);
+    });
+
+  function renderMarkers() {
+    state.events.forEach(ev => {
+      const marker = L.marker([ev.lat, ev.lng], { icon: eventIcon }).addTo(map);
+      marker.bindPopup(popupHtml(ev));
+      state.markers[ev.id] = marker;
+    });
+  }
+
+  function popupHtml(ev) {
+    const dateStr = formatDate(ev.date);
+    let distStr = '';
+    if (state.origin) {
+      const d = distanceMiles(state.origin.lat, state.origin.lng, ev.lat, ev.lng);
+      distStr = ' &middot; ' + d.toFixed(0) + ' mi away';
+    }
+    return '<div class="popup-title">' + escapeHtml(ev.name) + '</div>' +
+      '<div class="popup-meta">' + dateStr + distStr + '</div>' +
+      '<p class="popup-summary">' + escapeHtml(ev.summary || '') + '</p>';
+  }
+
+  function formatDate(dateStr) {
+    const d = new Date(dateStr + 'T00:00:00');
+    return d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+  }
+
+  function escapeHtml(str) {
+    const div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+  }
+
+  function setStatus(msg, warn) {
+    statusLine.textContent = msg;
+    statusLine.className = warn ? 'warn' : '';
+  }
+
+  // ---- Geocoding (free, no key — OpenStreetMap Nominatim) ----
+  function geocode(query) {
+    setStatus('Looking up "' + query + '"...');
+    return fetch('https://nominatim.openstreetmap.org/search?format=json&limit=1&q=' + encodeURIComponent(query))
+      .then(r => r.json())
+      .then(results => {
+        if (!results.length) {
+          setStatus('Could not find that location — try a more specific city/zip.', true);
+          return null;
+        }
+        return { lat: parseFloat(results[0].lat), lng: parseFloat(results[0].lon) };
+      })
+      .catch(() => {
+        setStatus('Location lookup failed. Check your connection and try again.', true);
+        return null;
+      });
+  }
+
+  function setOrigin(coords, label) {
+    state.origin = coords;
+    if (originMarker) map.removeLayer(originMarker);
+    originMarker = L.marker([coords.lat, coords.lng], { icon: originIcon }).addTo(map);
+    map.setView([coords.lat, coords.lng], 8);
+    setStatus(label || 'Location set.');
+    runSearch();
+  }
+
+  // ---- "Use my location" ----
+  document.getElementById('locate-btn').addEventListener('click', function () {
+    if (!navigator.geolocation) {
+      setStatus('Your browser does not support GPS location.', true);
+      return;
+    }
+    setStatus('Getting your location...');
+    navigator.geolocation.getCurrentPosition(
+      pos => {
+        locationInput.value = '';
+        setOrigin({ lat: pos.coords.latitude, lng: pos.coords.longitude }, 'Using your current location.');
+      },
+      () => setStatus('Could not get your location — check phone permissions, or type a city/zip instead.', true)
+    );
+  });
+
+  // ---- Typed location ----
+  let geocodeTimer;
+  locationInput.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') {
+      clearTimeout(geocodeTimer);
+      const q = locationInput.value.trim();
+      if (!q) return;
+      geocode(q).then(coords => {
+        if (coords) setOrigin(coords, 'Searching from "' + q + '".');
+      });
+    }
+  });
+
+  // ---- Search / filter ----
+  function runSearch() {
+    const radius = parseFloat(radiusInput.value) || 0;
+    const start = dateStart.value;
+    const end = dateEnd.value;
+
+    if (!state.origin) {
+      resultCount.textContent = '0';
+      resultsList.innerHTML = '<div class="empty-state">Set a starting point above to search.</div>';
+      return;
+    }
+
+    const matches = state.events
+      .map(ev => Object.assign({}, ev, {
+        distance: distanceMiles(state.origin.lat, state.origin.lng, ev.lat, ev.lng)
+      }))
+      .filter(ev => ev.distance <= radius && ev.date >= start && ev.date <= end)
+      .sort((a, b) => a.distance - b.distance);
+
+    state.matches = matches;
+    resultCount.textContent = matches.length;
+
+    // Update marker visibility/opacity based on match
+    const matchIds = new Set(matches.map(m => m.id));
+    Object.keys(state.markers).forEach(id => {
+      const marker = state.markers[id];
+      marker.setOpacity(matchIds.has(id) ? 1 : 0.25);
+      marker.setPopupContent(popupHtml(state.events.find(e => e.id === id)));
+    });
+
+    if (!matches.length) {
+      resultsList.innerHTML = '<div class="empty-state">No shows in range. Try a bigger radius or wider dates.</div>';
+      return;
+    }
+
+    resultsList.innerHTML = '';
+    matches.forEach(ev => {
+      const item = document.createElement('div');
+      item.className = 'result-item';
+      item.innerHTML =
+        '<div>' +
+          '<div class="name">' + escapeHtml(ev.name) + '</div>' +
+          '<div class="sub">' + formatDate(ev.date) + '</div>' +
+        '</div>' +
+        '<div class="dist">' + ev.distance.toFixed(0) + ' mi</div>';
+      item.addEventListener('click', () => {
+        map.setView([ev.lat, ev.lng], 11);
+        state.markers[ev.id].openPopup();
+      });
+      resultsList.appendChild(item);
+    });
+  }
+
+  [radiusInput, dateStart, dateEnd].forEach(el => {
+    el.addEventListener('change', runSearch);
+  });
+
+  drawerHandle.addEventListener('click', () => {
+    drawer.classList.toggle('collapsed');
+  });
+})();
+</script>
+
+</body>
+</html>
